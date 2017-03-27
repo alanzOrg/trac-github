@@ -247,6 +247,9 @@ class GitHubBrowser(GitHubMixin, ChangesetModule):
     repository = Option('github', 'repository', '',
             doc="Repository name on GitHub (<user>/<project>)")
 
+    host = Option('github', 'host', 'github.com',
+        doc="Repository host on GitHub Enterprise (github.com)")
+
     # IRequestHandler methods
 
     def match_request(self, req):
@@ -276,9 +279,9 @@ class GitHubBrowser(GitHubMixin, ChangesetModule):
         if path and path != '/':
             path = path.lstrip('/')
             # GitHub will s/blob/tree/ if the path is a directory
-            url = 'https://github.com/%s/blob/%s/%s' % (gh_repo, rev, path)
+            url = 'https://' + self.host + '/%s/blob/%s/%s' % (gh_repo, rev, path)
         else:
-            url = 'https://github.com/%s/commit/%s' % (gh_repo, rev)
+            url = 'https://' + self.host + '/%s/commit/%s' % (gh_repo, rev)
         req.redirect(url)
 
     # ITimelineEventProvider methods
